@@ -15,7 +15,12 @@ we are
 (use-modules (ice-9 format))  ;; format 
 ;;(use-modules (ice-9 assert))	no support for assertions?
 (use-modules (srfi srfi-64)) ;; for test suites
+(use-modules (srfi srfi-13)) ;; for hash tables
 
+;; ===== hash table refresher ====
+;; (define h (make-hash-table))
+;; (hash-ref h 'a 'nope)
+;; (hash-set! h 'a 'hihi)
 
 ;; shortcut for print
 ;; to enable debug messages use (format #t ,@args)
@@ -142,7 +147,7 @@ next - list of cells to consider in specific order those cells closest to known 
   (lambda ()
     (let ((result '()))
       (letrec ((rec2 (lambda (n m k)
-		       ;;(format #t "checking n(~a) : m(~a) : k(~a) ~%" n m k)
+		       ;;(debug #t "checking n(~a) : m(~a) : k(~a) ~%" n m k)
 		       (set! result (cons (list n m) result))
 		       (cond
 			((> k cells-per-side) #f)
@@ -426,6 +431,7 @@ edge square - 3 neighbours = one neighbour selected or three neighbours selected
      ;; 2 0 2 -> 2 must 0 cannot 2 total
      ;; contradiction reached - do not proceed
      ))
+
 (defmacro corner-102-macro ()
   `(when (and (= len-m 1) (= len-c 0) (= len-nb 2))
      ;; LANGFIX - out date/out sync error messages
@@ -443,6 +449,16 @@ edge square - 3 neighbours = one neighbour selected or three neighbours selected
        (let ((p1 (first choices)))
 	 (search3 must (cons p1 cannot) (cdr next))))))
 
+(defmacro corner-022-macro ()
+  `(when (and (= len-m 0) (= len-c 2) (= len-nb 2))
+     ;; LANGFIX - out date/out sync error messages
+     (when (eq? handled #t) (format #t "possible duplicate impl corner-022~%") (error "foo"))
+     ;; set handled flag
+     (set! handled #t)
+     ;;
+     ;; 0 2 2 -> 0 must . 2 cannot . 2 total.
+     ;; contradition - do not continue
+     ))
 
 
 
@@ -455,7 +471,7 @@ edge square - 3 neighbours = one neighbour selected or three neighbours selected
      ;; set handled flag
      (set! handled #t)
      ;; tell user whats happenening - should be debug message instead
-     (format #t "corner case 1 - free pick one neighbour, reject other ~%")
+     (debug #t "corner case 1 - free pick one neighbour, reject other ~%")
      ;; corner case m0 c0 nb2
      ;; 
      (let ((p1 (car nb))
@@ -475,7 +491,7 @@ edge square - 3 neighbours = one neighbour selected or three neighbours selected
      ;; set handled flag
      (set! handled #t)
      ;;
-     ;; (format #t "MCB-CORNER-012: { cannot == ~a } ~%" cannot)
+     ;; (debug #t "MCB-CORNER-012: { cannot == ~a } ~%" cannot)
      ;; 0 1 2 -> 0 must . 1 cannot . 2 total its a corner
      ;; add only remaining choice to must , nothing done to cannot bin , continue
      (let* ((without-cant (filter (lambda (cell) (not (member cell cannot))) nb))
@@ -541,6 +557,26 @@ edge square - 3 neighbours = one neighbour selected or three neighbours selected
        ;;pick all 3 neighbours
        (search3 (append (list p1 p2 p3) must) cannot (cdr next)))))
 
+
+
+(defmacro edge-123-macro ()
+  `(when
+       (and (= len-m 1)(= len-c 2)(= len-nb 3))
+     ;;
+     (when (eq? handled #t) (format #t "possible duplicate impl EDGES~%") (error "foo"))
+     ;; set handled flag
+     (set! handled #t)
+     ;; 1 2 3 -> 1 must . 2 cannot . 3 total . 
+     ;; nothing to do , all good , just continue.
+     ;; 
+     (let* ((without-cant (filter (lambda (cell) (not (member cell cannot))) nb))
+	    (choices (filter (lambda (cell) (not (member cell must))) without-cant)))
+       ;; assert choices len 0
+       (search3 must cannot (cdr next)))))
+
+
+
+
 (defmacro edge-303-macro ()
   `(when 
        (and (= len-m 3)(= len-c 0)(= len-nb 3))
@@ -556,6 +592,16 @@ edge square - 3 neighbours = one neighbour selected or three neighbours selected
        ;; assert choices len 0
        (search3 must cannot (cdr next)))))
 
+(defmacro edge-033-macro ()
+  `(when 
+       (and (= len-m 0)(= len-c 3)(= len-nb 3))
+     ;;
+     (when (eq? handled #t) (format #t "possible duplicate impl EDGES~%") (error "foo"))
+     ;; set handled flag
+     (set! handled #t)
+     ;; 0 3 3 -> 0 must . 3 cannot . 3 total
+     ;; contradiction - do not continue
+     ))
 
 
 (defmacro edge-013-macro ()
@@ -580,6 +626,21 @@ edge square - 3 neighbours = one neighbour selected or three neighbours selected
 	 ;; done
 	 ))))
 
+(defmacro edge-213-macro ()
+  `(when 
+       (and (= len-m 2)(= len-c 1)(= len-nb 3))
+     ;;  2    1     3  ->  
+     (when (eq? handled #t) (format #t "possible duplicate impl EDGES~%") (error "foo"))
+     ;; set handled flag
+     (set! handled #t)
+     ;; 2 1 3 -> 2 must 1 cannot 3
+     ;; 2 neighbour squares must be selected , 1 cannot be chosen , only 3 total
+     ;; no solutions follow from here
+     ;; contradiction - do not continue
+     ))
+
+
+
 
 (defmacro edge-023-macro ()
   `(when 
@@ -589,7 +650,7 @@ edge square - 3 neighbours = one neighbour selected or three neighbours selected
      ;; set handled flag
      (set! handled #t)
 
-     (format #t "EDGE MCB023 : hello fox .~%")
+     (debug #t "EDGE MCB023 : hello fox .~%")
      (let* ((without-cant (filter (lambda (cell) (not (member cell cannot))) nb))
 	    (choices (filter (lambda (cell) (not (member cell must))) without-cant)))
        (cond
@@ -611,7 +672,7 @@ edge square - 3 neighbours = one neighbour selected or three neighbours selected
      ;; set handled flag
      (set! handled #t)
      ;;
-     (format #t "EDGE MCB103 : hello .~%")
+     (debug #t "EDGE MCB103 : hello .~%")
      (let* ((without-cant (filter (lambda (cell) (not (member cell cannot))) nb))
 	    (choices (filter (lambda (cell) (not (member cell must))) without-cant)))
        (cond
@@ -634,12 +695,12 @@ edge square - 3 neighbours = one neighbour selected or three neighbours selected
      ;; set handled flag
      (set! handled #t)
      ;;
-     (format #t "edge case MCB203: debug help len-m-c-nb ~a ~a ~a~%" len-m len-c len-nb)
+     (debug #t "edge case MCB203: debug help len-m-c-nb ~a ~a ~a~%" len-m len-c len-nb)
      ;; 2 neighbours must . no neighbours in cannot , 3 neighbours in total
      ;; must choose only remaining
      (let* ((without-cant (filter (lambda (cell) (not (member cell cannot))) nb))
 	    (choices (filter (lambda (cell) (not (member cell must))) without-cant)))
-       (format #t "choices =~a~%" choices)
+       (debug #t "choices =~a~%" choices)
        (let ((p1 (first choices)))
 	 ;; pick p1 
 	 (search3 (cons p1 must) cannot (cdr next))))))
@@ -663,132 +724,216 @@ edge square - 3 neighbours = one neighbour selected or three neighbours selected
 
 ;; =========== end search macros ==================================
 
+(define solutions-count 0)
+(define solutions (make-hash-table))
+
+;; sorter for coordinates
+;; p1 (x1 y1)
+;; p2 (x2 y2)
+
+
+
+(define coord-compare
+  (lambda (p1 p2)
+    (let ((x1 (first p1))
+	  (y1 (second p1))
+	  (x2 (first p2))
+	  (y2 (second p2)))
+      (let ((result #t))	
+	(cond
+	 ((< x1 x2) (set! result #t))
+	 ((> x1 x2) (set! result #f)) ;;
+	 ((< y1 y2) (set! result #t))
+	 (#t (set! result #f)))	
+	(format #t "point1: ~a " p1)
+	(format #t "x1: ~a " x1)
+	(format #t "y1: ~a ~%" y1)
+	(format #t "point2: ~a " p2)
+	(format #t "x2: ~a " x2)
+	(format #t "y2: ~a ~%" y2)
+	(format #t "comparing ~a is less than ~a ? => ~a ~%" p1 p2 result)
+	result))))
+
+
+
+;; ========= TEST SUITES need SRFI - 64 =============
+(test-begin "sort-test")
+;; to be sorted
+;; hopefully this is a local definition inside sort-test
+(define input '((1 1)(2 2)(1 2)(2 1)(3 1)(3 2)(3 3)(1 3)(2 3)(1 2)))
+;; REquuire expression eval to true but its false
+;;(test-assert #f)
+;; Require that an expression evaluate to true.
+;; (test-assert (vector? v))
+;; Test that an expression is eqv? to some other expression.
+;; (test-eqv 99 (vector-ref v 2))
+;; (vector-set! v 2 7)
+;; (test-eqv 7 (vector-ref v 2))
+(define output-desired '((1 1)(1 2)(1 2)(1 3)(2 1)(2 2)(2 3)(3 1)(3 2)(3 3)))
+
+(test-equal output-desired (sort input coord-compare))
+;; Finish the testsuite, and report results.
+(test-end "sort-test")
+
+;; ==========================================================
 
 
 
 (define search3
-  (lambda (must cannot next)
-    (cond
-     ((null? next)
-      ;; THIS SHOULD BE A SOLUTION AS ALL SATISFIED
-      (format #t "FINAL NO MORE : ~a~%~%" must)
-      (must->smalltalk must)
-      (format #t "~%~%")
-      (error "~%;;------------------NO MORE NEXT VALUES-----------------~%")
-      must)
-     (#t (let ((opt (car next)))
-	   ;; continue search with next as (cdr next)
-	   (let ((nb (neighbours opt)))
-	     (let* ((m (filter (lambda (cell) (member cell must)) nb))
-		    (c (filter (lambda (cell) (member cell cannot)) nb))
-		    (len-m (length m))
-		    (len-c (length c))
-		    (len-nb (length nb)))
-	       ;; m c nb
-	       ;; local must , local cannot , local neighbours
-	       (debug #t "~%~%considering ~a~%" opt)
-	       (debug #t "m(~a) ~a : must(~a) ~a~%" len-m m (length must) must)
-	       (debug #t "c(~a) ~a : cannot ~a ~%" len-c c cannot)
-	       (debug #t "neigh(~a) ~a ~%" len-nb nb)
-	       
-	       (cond
-		((corner? opt)
-		 ;; ================ CORNER CASES ======================
-		 (debug #t "corner square !~%")
-		 (debug #t "corner case : prem-debug help len-m-c-nb ~a ~a ~a~%"
-			     len-m len-c len-nb)		     
+    (lambda (must cannot next)
+      (cond
+       ((null? next)
 
-		 ;; cases
-		 ;; must cannot neighbour
-		 ;;  0    0     2  -> pick one neighbour as accept, other reject
-		 ;;  0    1     2  -> pick one neighbour not in cannot, other already in cant
-		 ;;  0    2     2  -> contradict
-		 ;;  1    0     2  -> fully defined ,no action , move next square
-		 ;;  1    1     2  -> fully defined
-		 ;;  1    2     2  -> absurd should not happen !
-		 ;;  2    0     2  -> absurd
-		 ;;  2    1     2  -> absurd
-		 ;;  2    2     2  -> absurd		 
-		 (let ((handled #f))
+	(let ((sorted-must
+	       (sort must (lambda (m1 m2) ;; destructure
+			    (let ((m1x (first m1))
+				  (m1y (second m1))
+				  (m2x (first m2))
+				  (m2y (second m2)))
+			      (if (< m1x m2x)
+				  #t
+				  (if (< m1y m2y)
+				      #t
+				      #f)))))))
 
-		   (corner-002-macro)
-		   (corner-012-macro)
-		   (corner-112-macro)
-		   (corner-202-macro)
-		   (corner-102-macro)
-		   
-		   
-		   
-		   ;; ((and (= len-m 0) (= len-c 0) (= len-nb 2))
-		   ;;  (debug #t "corner case 1 - free pick one neighbour, reject other ~%")
-		   ;;  (let ((p1 (car nb))
-		   ;; 	 (p2 (car (cdr nb))))
-		   ;;    ;; pick first
-		   ;;    (search3 (cons p1 must) (cons p2 cannot) (cdr next))
-		   ;;    ;; pick second
-		   ;;    (search3 (cons p2 must) (cons p1 cannot) (cdr next)))
-		   ;;  ) ;; m0 c0 nb2
-		   
-		   (when (not handled)
-		     (debug #t "corner case : debug help len-m-c-nb ~a ~a ~a~%"
-			     len-m len-c len-nb)		     
-		     (error "corner case not handled")))
-		 ;; assert length nb == 2
-		 ) ;; end corner
-		((edge? opt)
-		 ;; ================ EDGE  CASES ======================
-		 (debug #t "edge square ")
-		 ;; cases 
-		 ;; must cannot neighbour
-		 (let ((handled #f))
-		   
-		   (edge-003-macro)
-		   (edge-013-macro)
-		   (edge-023-macro)		  		  
-                   (edge-103-macro)
-		   (edge-113-macro)
-		   (edge-203-macro)
-		   (edge-303-macro)
+	  ;; is this a unique solution
+	  (let ((found (hash-ref solutions sorted-must #f)))
+	    (cond
+	     (found #f) ;;already in solutions hash table
+	     (#t ;; new solution
+	      ;; THIS SHOULD BE A SOLUTION AS ALL SATISFIED
+	      ;;(debug #t "FINAL NO MORE : ~a~%~%" must)
+	      ;; store #t flag at whole solution - hopefully hash uses equal? 
+	      (hash-set! solutions sorted-must #t)
+	      (set! solutions-count (+ 1 solutions-count))
+	      ;; (format #t "~a" sorted-must)
+	      ;; (format #t "~%")	      
+	      (format #t "\"solution ~a \"~%" solutions-count)
+	      (must->smalltalk sorted-must)
+	      ;; (format #t "~%")
+	      ;;(error "~%;;------------------NO MORE NEXT VALUES-----------------~%")
+	      ;; must))
+	      ))))) ;; null? next - ie all squares have been processed / reasoned about
+	      
+       (#t (let ((opt (car next)))
+	     ;; continue search with next as (cdr next)
+	     (let ((nb (neighbours opt)))
+	       (let* ((m (filter (lambda (cell) (member cell must)) nb))
+		      (c (filter (lambda (cell) (member cell cannot)) nb))
+		      (len-m (length m))
+		      (len-c (length c))
+		      (len-nb (length nb)))
+		 ;; m c nb
+		 ;; local must , local cannot , local neighbours
+		 (debug #t "~%~%considering ~a~%" opt)
+		 (debug #t "m(~a) ~a : must(~a) ~a~%" len-m m (length must) must)
+		 (debug #t "c(~a) ~a : cannot ~a ~%" len-c c cannot)
+		 (debug #t "neigh(~a) ~a ~%" len-nb nb)
+		 
+		 (cond
+		  ((corner? opt)
+		   ;; ================ CORNER CASES ======================
+		   (debug #t "corner square !~%")
+		   (debug #t "corner case : prem-debug help len-m-c-nb ~a ~a ~a~%"
+			  len-m len-c len-nb)		     
 
-		   
-		   (when (not handled)
-		     (debug #t "edge case : debug help len-m-c-nb ~a ~a ~a~%"
-			     len-m len-c len-nb)
-		     (error "edge case not handled!"))) ;;let hanlded
-		 );; end edge
-		((inside? opt)
-		 ;; ================ INSIDE CASES ======================
-		 (debug #t "inside square ")
+		   ;; cases
+		   ;; must cannot neighbour
+		   ;;  0    0     2  -> pick one neighbour as accept, other reject
+		   ;;  0    1     2  -> pick one neighbour not in cannot, other already in cant
+		   ;;  0    2     2  -> contradict
+		   ;;  1    0     2  -> fully defined ,no action , move next square
+		   ;;  1    1     2  -> fully defined
+		   ;;  1    2     2  -> absurd should not happen !
+		   ;;  2    0     2  -> absurd
+		   ;;  2    1     2  -> absurd
+		   ;;  2    2     2  -> absurd		 
+		   (let ((handled #f))
 
-		 (let ((handled #f))
-		   
-		   (inside-214-macro)		  
-		   (inside-124-macro)
-		   (inside-204-macro)
-		   (inside-304-macro)
-		   (inside-104-macro)
-		   (inside-114-macro)
-		   (inside-024-macro)
-		   (inside-034-macro)
-		   (inside-014-macro) ;; TODO
-		   
-		   
-		   ;; assert length nb == 4 
-		   ;; 4 in must-nb -> contradiction , do not continue!
-		   ;; 3 in must-nb -> fully defined , no action , move next square
-		   ;; caveat
-		   ;; 2 in must-nb 
-		   ;; 1 in must-nb 
-		   ;; 0 in must-nb 0 1 2 3 4 in cannot-nb
+		     (corner-002-macro)
+		     (corner-012-macro)
+		     (corner-112-macro)
+		     (corner-202-macro)
+		     (corner-102-macro)		     
+		     (corner-022-macro) 
+		     
+		     
+		     ;; ((and (= len-m 0) (= len-c 0) (= len-nb 2))
+		     ;;  (debug #t "corner case 1 - free pick one neighbour, reject other ~%")
+		     ;;  (let ((p1 (car nb))
+		     ;; 	 (p2 (car (cdr nb))))
+		     ;;    ;; pick first
+		     ;;    (search3 (cons p1 must) (cons p2 cannot) (cdr next))
+		     ;;    ;; pick second
+		     ;;    (search3 (cons p2 must) (cons p1 cannot) (cdr next)))
+		     ;;  ) ;; m0 c0 nb2
+		     
+		     (when (not handled)
+		       (debug #t "corner case : debug help len-m-c-nb ~a ~a ~a~%"
+			      len-m len-c len-nb)		     
+		       (error "corner case not handled")))
+		   ;; assert length nb == 2
+		   ) ;; end corner
+		  ((edge? opt)
+		   ;; ================ EDGE  CASES ======================
+		   (debug #t "edge square ")
+		   ;; cases 
+		   ;; must cannot neighbour
+		   (let ((handled #f))
+		     
+		     (edge-003-macro)
+		     (edge-013-macro)
+		     (edge-023-macro)		  		  
+                     (edge-103-macro)
+		     (edge-113-macro)
+		     (edge-203-macro)
+		     (edge-303-macro)		     
+		     (edge-213-macro)		     
+		     (edge-123-macro)
+		     (edge-033-macro)
+		     
 
-		   (when (not handled)
-		     (debug #t "inside case : debug help len-m-c-nb ~a ~a ~a~%"
-			     len-m len-c len-nb)
-		     (error "inside case not handled!"))
-		   
-		   ) ;; handled flag cond
-		 );; inside? opt
-		))))))))
+		     
+		     (when (not handled)
+		       (debug #t "edge case : debug help len-m-c-nb ~a ~a ~a~%"
+			      len-m len-c len-nb)
+		       (error "edge case not handled!"))) ;;let hanlded
+		   );; end edge
+		  ((inside? opt)
+		   ;; ================ INSIDE CASES ======================
+		   (debug #t "inside square ")
+
+		   (let ((handled #f))
+		     
+		     (inside-214-macro)		  
+		     (inside-124-macro)
+		     (inside-204-macro)
+		     (inside-304-macro)
+		     (inside-104-macro)
+		     (inside-114-macro)
+		     (inside-024-macro)
+		     (inside-034-macro)
+		     (inside-014-macro) ;; TODO
+		     
+		     
+		     ;; assert length nb == 4 
+		     ;; 4 in must-nb -> contradiction , do not continue!
+		     ;; 3 in must-nb -> fully defined , no action , move next square
+		     ;; caveat
+		     ;; 2 in must-nb 
+		     ;; 1 in must-nb 
+		     ;; 0 in must-nb 0 1 2 3 4 in cannot-nb
+
+		     (when (not handled)
+		       (debug #t "inside case : debug help len-m-c-nb ~a ~a ~a~%"
+			      len-m len-c len-nb)
+		       (error "inside case not handled!"))
+		     
+		     ) ;; handled flag cond
+		   );; inside? opt
+		  )))))))) ;; search3
+
+
 
 
 
@@ -819,6 +964,8 @@ edge square - 3 neighbours = one neighbour selected or three neighbours selected
 ;; just look at the beauty of this triangle
 (define run
   (lambda ()
+    (set! solutions-count 0)
+    (set! solutions (make-hash-table))
     (let ((must '())
 	  (cannot '())
 	  (next '((1 1)
