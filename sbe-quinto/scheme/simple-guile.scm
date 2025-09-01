@@ -1,4 +1,62 @@
 
+;;; ***
+;;; -*- guile scheme -*-  ***
+;;; ***
+
+#|
+
+specifics related to guile scheme
+we are
+
+
+|#
+(use-modules (srfi srfi-1)) ;; first second third 
+(use-modules (ice-9 pretty-print)) ;; pp pretty printer
+(use-modules (ice-9 format))  ;; format 
+;;(use-modules (ice-9 assert))	no support for assertions?
+(use-modules (srfi srfi-64)) ;; for test suites
+
+
+
+		  
+
+
+
+
+;; ========= DEFMACRO - ABSOLUTELY need UN-HYGEINCIC MACROS =====
+"x gets overwritten , so save it to tmp first "
+(defmacro swap! (x y)
+  (let ((tmp (gensym)))
+  `(let ((,tmp ,x))
+     (set! ,x ,y)
+     (set! ,y ,tmp))))
+
+
+;; C-c RET C-e  see guile macro expansion equivalent
+(let ((a 1)(b 2))
+  (swap! a b)
+  (list a b))
+
+
+;; ========= TEST SUITES need SRFI - 64 =============
+
+;; Initialize and give a name to a simple testsuite.
+(test-begin "vec-test")
+(define v (make-vector 5 99))
+;; REquuire expression eval to true but its false
+;;(test-assert #f)
+
+;; Require that an expression evaluate to true.
+(test-assert (vector? v))
+;; Test that an expression is eqv? to some other expression.
+(test-eqv 99 (vector-ref v 2))
+(vector-set! v 2 7)
+(test-eqv 7 (vector-ref v 2))
+;; Finish the testsuite, and report results.
+(test-end "vec-test")
+
+
+
 #|
 
 quinto solver 
@@ -21,11 +79,6 @@ in corner click x - takes out two O's
 how do we get chicken docs info again ? i forgot ?
 
 |#
-(import (srfi-1))
-(import (chicken pretty-print))
-(import (chicken format))
-(import (test))
-;;(import (assert))
 
 (define cells-per-side 10)
 
@@ -54,6 +107,7 @@ if (1 1) is in cannot-press list , we cannot press it
 	(when (< y cells-per-side) (set! result (cons (list x (+ y 1))  result)))
 	result))))
 
+#|
 (test "neighbours of cell 1 1 should be 1 2 and 2 1"
       '((1 2)(2 1))
       (neighbours '(1 1)))
@@ -67,6 +121,8 @@ if (1 1) is in cannot-press list , we cannot press it
 (test "neighbours of cell 1 2 should be 1 1 and 2 2 and 1 3"
       '((1 3)(1 1)(2 2))
       (neighbours '(1 2)))
+|#
+
 
 #|
 each cell must only have an odd number of pressed neighbours , when this constraint
@@ -134,11 +190,12 @@ edge square - 3 neighbours = one neighbour selected or three neighbours selected
        ((and (= x cells-per-side) (= y cells-per-side)) #t)       
        (#t #f)))))
 
-
+#|
 (test "corner? 1 1"       #t      (corner? '(1 1)))
 (test "corner? 1 10"      #t      (corner? '(1 10)))
 (test "corner? 10 1"      #t      (corner? '(10 1)))
 (test "corner? 10 10"     #t      (corner? '(10 10)))
+|#
 
 (define edge?
   (lambda (cell)
@@ -151,6 +208,7 @@ edge square - 3 neighbours = one neighbour selected or three neighbours selected
        ((and (= y cells-per-side) (>= x 2) (<= x cells-per-side)) #t)
        (#t #f)))))
 
+#|
 (test "edge? 1 1"      #f      (edge? '(1 1)))
 
 (test "edge? 2 1"      #t      (edge? '(2 1)))
@@ -170,7 +228,7 @@ edge square - 3 neighbours = one neighbour selected or three neighbours selected
 (test "edge? 1 2"      #t      (edge? '(1 2)))
 (test "edge? 1 2"      #t      (edge? '(1 2)))
 (test "edge? 1 2"      #t      (edge? '(1 2)))
-
+|#
 
 (define inside?
   (lambda (cell)
@@ -179,9 +237,60 @@ edge square - 3 neighbours = one neighbour selected or three neighbours selected
      ((edge? cell) #f)
      (#t #t))))
 
+#|
 (test "inside? 1 1"      #f  (inside? '(1 1)))
 (test "inside? 4 1"      #f  (inside? '(4 1)))
 (test "inside? 2 2"      #t  (inside? '(2 2)))
+|#
+
+
+
+
+;; ========== Macro definitoins first ================
+
+;;(inside-214-macro)
+
+(defmacro inside-214-macro ()
+  `(when (and (= len-m 2)(= len-c 1)(= len-nb 4)
+    ;;  2    1     4  ->  
+    (let* ((without-cant (filter (lambda (cell) (not (member cell cannot))) nb))
+	   (choices (filter (lambda (cell) (not (member cell must))) without-cant)))
+
+      (let ((p1 (first choices)))
+	;; pick p1 , only choice to make to hold constraint 1 or 3 selected neighbours must.
+	(search3 (cons p1 must) cannot (cdr next))
+	)))))
+
+
+
+;;(inside-214-macro)
+
+
+
+(defmacro inside-204-macro ()
+  `(when (and (= len-m 2)(= len-c 0)(= len-nb 4))
+    ;;  2    1     4  ->  
+    (let* ((without-cant (filter (lambda (cell) (not (member cell cannot))) nb))
+	   (choices (filter (lambda (cell) (not (member cell must))) without-cant)))
+
+      (let ((p1 (first choices)))
+	;; pick p1 , only choice to make to hold constraint 1 or 3 selected neighbours must.
+	(search3 (cons p1 must) cannot (cdr next))
+	))))
+
+
+
+(defmacro inside-124-macro ()
+  `(when (and (= len-m 1)(= len-c 2)(= len-nb 4))
+    ;;  1    2     4  ->  nothing to do since choices should be length 1 that would unbalance
+    (let* ((without-cant (filter (lambda (cell) (not (member cell cannot))) nb))
+	   (choices (filter (lambda (cell) (not (member cell must))) without-cant)))
+      (cond
+       ((= (length choices) 1)
+	(search3 must cannot (cdr next)))
+       (#t
+	(format #t "MCB124 : errro cannot have choices length differ from 1 ? surely.~%")
+	(error "absurdity"))))))
 
 
 
@@ -348,32 +457,24 @@ edge square - 3 neighbours = one neighbour selected or three neighbours selected
 		 ;; ================ INSIDE CASES ======================
 		 (format #t "inside square ")
 
-		 (cond
-
-		  ((and (= len-m 2)(= len-c 1)(= len-nb 4))
-		   ;;  2    1     4  ->  
-		   (let* ((without-cant (filter (lambda (cell) (not (member cell cannot))) nb))
-			  (choices (filter (lambda (cell) (not (member cell must))) without-cant)))
-
-		     (let ((p1 (first choices)))
-		       ;; pick p1 , only choice to make to hold constraint 1 or 3 selected neighbours must.
-		       (search3 (cons p1 must) cannot (cdr next))
-		       ))		   
-		   );; end of 2 1 4
-
-
-		  ((and (= len-m 1)(= len-c 2)(= len-nb 4))
-		   ;;  1    2     4  ->  nothing to do since choices should be length 1 that would unbalance
-		   (let* ((without-cant (filter (lambda (cell) (not (member cell cannot))) nb))
-			  (choices (filter (lambda (cell) (not (member cell must))) without-cant)))
-		     (cond
-		      ((= (length choices) 1)
-		       (search3 must cannot (cdr next)))
-		      (#t
-		       (format #t "MCB124 : errro cannot have choices length differ from 1 ? surely.~%")
-		       (error "absurdity"))))
-		   );; end of 1 2 4
+		 (let ((handled #f))
 		  
+		  (inside-214-macro)
+		  
+		  ;; ((and (= len-m 2) (= len-c 1) (= len-nb 4))
+		  ;;  (let* ((without-cant
+		  ;; 	   (filter
+		  ;; 	    (lambda (cell) (not (member cell cannot)))
+		  ;; 	    nb))
+		  ;; 	  (choices
+		  ;; 	   (filter
+		  ;; 	    (lambda (cell) (not (member cell must)))
+		  ;; 	    without-cant))
+		  ;; 	  (p1 (first choices)))
+		  ;;    (search3 (cons p1 must) cannot (cdr next))))
+
+		  
+		  ;;(inside-124-macro)
 		  
 		 ;; assert length nb == 4 
 		 ;; 4 in must-nb -> contradiction , do not continue!
@@ -383,13 +484,16 @@ edge square - 3 neighbours = one neighbour selected or three neighbours selected
 		 ;; 1 in must-nb 
 		  ;; 0 in must-nb 0 1 2 3 4 in cannot-nb
 
-		  (#t
-		   (format #t "inside case : debug help len-m-c-nb ~a ~a ~a~%" len-m len-c len-nb)
+		  (when (not handled)
+		    (format #t "inside case : debug help len-m-c-nb ~a ~a ~a~%"
+			    len-m len-c len-nb)
 		   (error "inside case not handled!"))
-		  );; end cond
 		  
-		 ) ;; end inside
-		))))))))
+		 ) ;; handled flag cond
+		 )))))))))
+
+  
+
 
 
 
@@ -425,8 +529,16 @@ edge square - 3 neighbours = one neighbour selected or three neighbours selected
 		  (4 1)(3 2)(2 3)(1 4)
 		  (5 1)(4 2)(3 3)(2 4)(1 5)
 		  (6 1)(5 2)(4 3)(3 4)(2 5)(1 6)
+		  (7 1)(6 2)(5 3)(4 4)(3 5)(2 6)(1 7)
+		  (8 1)(7 2)(6 3)(5 4)(4 5)(3 6)(2 7)(1 8)
+		  (9 1)(8 2)(7 3)(6 4)(5 5)(4 6)(3 7)(2 8)(1 9)
+		  (10 1)(9 2)(8 3)(7 4)(6 5)(5 6)(4 7)(3 8)(2 9)(1 10)
+		  ;; still some remaining
+		  
 		  )))
       (search3 must cannot next))))
+
+
 
 
 
