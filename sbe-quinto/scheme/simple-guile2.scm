@@ -724,9 +724,6 @@ edge square - 3 neighbours = one neighbour selected or three neighbours selected
 
 ;; =========== end search macros ==================================
 
-(define solutions-count 0)
-(define solutions (make-hash-table))
-
 ;; sorter for coordinates
 ;; p1 (x1 y1)
 ;; p2 (x2 y2)
@@ -778,6 +775,11 @@ edge square - 3 neighbours = one neighbour selected or three neighbours selected
 ;; ==========================================================
 
 
+(define solutions-count 0)
+(define solutions (make-hash-table))
+(define shortest-solutions '())
+(define shortest-solution-length #f)
+
 
 (define search3
     (lambda (must cannot next)
@@ -807,9 +809,29 @@ edge square - 3 neighbours = one neighbour selected or three neighbours selected
 	      (hash-set! solutions sorted-must #t)
 	      (set! solutions-count (+ 1 solutions-count))
 	      ;; (format #t "~a" sorted-must)
-	      ;; (format #t "~%")	      
-	      (format #t "\"solution ~a \"~%" solutions-count)
-	      (must->smalltalk sorted-must)
+	      ;; (format #t "~%")
+
+	      ;; hidden solutions count for now 
+	      ;;(format #t "\"solution ~a \"~%" solutions-count)
+
+	      ;; determine if shortest solution so far
+	      ;; ensure shortest-solution-length has integer value 
+	      (when (eq? shortest-solution-length #f)
+		(set! shortest-solution-length (length sorted-must)))
+
+	      ;;
+	      (when (= (length sorted-must) shortest-solution-length)
+		(set! shortest-solutions (cons sorted-must shortest-solutions)))
+
+	      ;; record new best shortest solution length
+	      (when (< (length sorted-must) shortest-solution-length)
+		(set! shortest-solutions (list sorted-must))
+		(set! shortest-solution-length (length sorted-must))
+		(format #t "new best shortest solution length ~a ~%"
+			shortest-solution-length)
+	      ;; report answer in terms of smalltalk language
+		(must->smalltalk sorted-must))
+ 	      
 	      ;; (format #t "~%")
 	      ;;(error "~%;;------------------NO MORE NEXT VALUES-----------------~%")
 	      ;; must))
@@ -998,12 +1020,20 @@ edge square - 3 neighbours = one neighbour selected or three neighbours selected
 ;; helper turn list into smalltalk message
 (define must->smalltalk
   (lambda (xs)
-    (format #t "~%s setMoves: {")
-    (map (lambda (pr)
-	   (format #t " ~a~a~a ." (first pr) "@" (second pr))) xs)
-    (format #t "}.~%")))
+    (format #t "{")
+    ;; cannot map over - need to know if this is last element of sequence
+    (let ((lim (- (length xs) 1)))
+      (let loop ((i 0))
+	(let ((pr (list-ref xs i)))
+	  (cond
+	   ((>= i lim) ;; last item in list
+	    (format #t " ~a~a~a " (first pr) "@" (second pr)))
+	   (#t ;; not last item include dot 
+	    (format #t " ~a~a~a . " (first pr) "@" (second pr))
+	    (loop (+ i 1))))))
+      (format #t "} . "))))
 
-;;(must->smalltalk '((3 3) (4 2) (1 4) (2 3) (3 2) (2 2) (1 2)))
+(must->smalltalk '((3 3) (4 2) (1 4) (2 3) (3 2) (2 2) (1 2)))
 
 
 
