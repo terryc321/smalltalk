@@ -431,6 +431,19 @@ edge square - 3 neighbours = one neighbour selected or three neighbours selected
 
 
 
+;; helper turn list into smalltalk message
+(define must->smalltalk
+  (lambda (xs)
+    (format #t "~%s setMoves: {")
+    (map (lambda (pr)
+	   (format #t " ~a~a~a ." (first pr) "@" (second pr))) xs)
+    (format #t "}.~%")))
+
+(must->smalltalk '((3 3) (4 2) (1 4) (2 3) (3 2) (2 2) (1 2)))
+
+
+
+
 
 
 
