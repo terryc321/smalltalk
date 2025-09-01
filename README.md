@@ -7,7 +7,7 @@ fantastic bit of guile scheme lisp code to solve the quinto 10 x 10 game
 
 uses un-hygienic lisp macros extensively
 
-![SBE Quinto](sbe-quinto/Screenshot_20250813-115149.png "sbe quinto")
+![SBE Quinto](sbe-quinto/screenshots/Screenshot_20250813-115149.png "sbe quinto")
 
 smalltalk by example (sbe) quinto game 
 
