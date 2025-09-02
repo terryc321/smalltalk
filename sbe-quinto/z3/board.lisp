@@ -53,15 +53,15 @@ side logic
 
 	  (let ((len (length true-neighbours)))
 	    (cond
-	      ((= len 2) (corner true-neighbours))
-	      ((= len 3) (edge true-neighbours))
-	      ((= len 4) (internal true-neighbours))
+	      ((= len 2) (corner square true-neighbours))
+	      ((= len 3) (edge square true-neighbours))
+	      ((= len 4) (internal square true-neighbours))
 	      (t (error "cannot exist")))))))))
 
 
-(defun corner () t)
-(defun edge () t)
-(defun internal () t)
+(defun corner (square neighbours) t)
+(defun edge (square neighbours) t)
+(defun internal (square neighbours) t)
 
 
 	
