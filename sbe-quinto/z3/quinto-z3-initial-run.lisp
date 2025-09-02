@@ -2,6 +2,8 @@
 
 #|
 
+purpose of initial run is to generate a z3 file that once fed to z3 will generate a solution file
+
 (run) -- deletes auto.z3 auto.z3out 
 
 

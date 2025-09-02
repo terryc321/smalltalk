@@ -2,6 +2,41 @@
 
 #|
 
+purpose of continous run is to use pre-generated files
+
+quinto-z3-header.z3
+quinto-z3-solutions.z3
+quinto-z3-footer.z3
+
+CAT them all together to make
+
+continuous.z3
+z3 continous.z3 > continuous.z3out
+scan continuous.z3out for SAT word followed by a SOLUTION
+we decode solution
+we look for any square that has TRUE boolean value
+collect all squares with TRUE booleans and make a big assertion 
+
+ (assert (not (and s_01_01 s_02_02 s_03_03 ..)))
+
+this is then appended to quinto-z3-solutions.z3 
+
+quinto-z3-solutions.z3 ends up looking like ...
+
+ (assert (not (and s_01_01 s_02_02 s_03_03 ..)))
+ (assert (not (and s_01_01 s_02_02 s_03_03 ..)))
+ (assert (not (and s_01_01 s_02_02 s_03_03 ..)))
+ (assert (not (and s_01_01 s_02_02 s_03_03 ..)))
+ ...
+
+we also append to smalltalk file which
+we can fix up {  .} mistake using a shell command 
+quinto-z3-solutions.st 
+
+
+
+initial run is to generate a z3 file that once fed to z3 will generate a solution file
+
 (run) -- deletes auto.z3 auto.z3out 
 
 
@@ -171,16 +206,18 @@ side logic
   ;;
   (reset-solution-hash)
 
+  ;;(uiop:run-program "cat quinto-z3-header.z3 > auto.z3")
+
   ;; generate auto.z3 -- can we do this from memory?
-  (with-open-file (*standard-output* "auto.z3"
-                                   :direction :output
-                                   :if-exists :supersede)
-    (the-symbol-definitions)
-    (traverse)
-    (conclusion))
+  ;; (with-open-file (*standard-output* "auto.z3"
+  ;;                                  :direction :output
+  ;;                                  :if-exists :supersede)
+  ;;   (the-symbol-definitions)
+  ;;   (traverse)
+  ;;   (conclusion))
   
   ;; run shell script - externally run z3 -
-  (uiop:run-program `("z3" "auto.z3") :output "auto.z3out")
+  ;; (uiop:run-program `("z3" "auto.z3") :output "auto.z3out")
   ;; read z3 output generated
   (with-open-file (stream "auto.z3out")
     (let ((outcome (read stream)))
