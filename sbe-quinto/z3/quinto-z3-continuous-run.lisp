@@ -2,6 +2,12 @@
 
 #|
 
+using save-lisp-and-die with uiop already installed
+
+;; for uiop:run-program ;; shell out
+;;(ql:quickload :uiop) 
+
+
 purpose of continous run is to use pre-generated files
 
 quinto-z3-header.z3
@@ -52,12 +58,20 @@ side logic
 
 |#
 
+(ql:quickload :uiop)
+
 
 (defpackage :tc
   (:use :cl))
 (in-package :tc)
 
-;; do (in-package :tc)
+
+
+(defparameter *solutions* nil)
+
+(defparameter symbol-hash (make-hash-table :test #'eq)) ;;qualp))
+
+(defparameter solution-hash (make-hash-table :test #'equalp))
 
 (defun off-board-p (square)
   (let ((x (car square))
@@ -68,47 +82,6 @@ side logic
       ((> x 10) t)
       ((> y 10) t)
       (t nil))))
-
-
-
-(defun on-board-p (square)
-  (not (off-board-p square)))
-
-(defun make-z3-symbol (square)
-  (let ((x (car square))
-	(y (car (cdr square))))
-    (format nil "s_~a_~a" x y)))
-
-
-(defun the-symbol-definitions ()
-  (loop for x from 1 to 10 do
-    (loop for y from 1 to 10 do
-	(let ((square (list x y)))
-	  (format t "(declare-const ~a bool)~%"(make-z3-symbol square))))))
-
-
-
-(defun traverse ()
-  (loop for x from 1 to 10 do
-    (loop for y from 1 to 10 do
-      (let ((neighbours (list (list (- x 1) y)
-			      (list (+ x 1) y)
-			      (list x (- y 1))
-			      (list x (+ y 1)))))
-	(let ((square (list x y))
-	      (true-neighbours (remove-if-not #'on-board-p neighbours)))
-	  (format t "~%;;neighbours of ~a => ~a ~%" (make-z3-symbol square) true-neighbours)
-
-	  (let ((len (length true-neighbours)))
-	    (cond
-	      ((= len 2) (corner square true-neighbours))
-	      ((= len 3) (edge square true-neighbours))
-	      ((= len 4) (internal square true-neighbours))
-	      (t (error "cannot exist")))))
-	t))))
-
-
-	    
 
 
 
@@ -170,19 +143,52 @@ side logic
 
 
 
+(defun on-board-p (square)
+  (not (off-board-p square)))
+
+(defun make-z3-symbol (square)
+  (let ((x (car square))
+	(y (car (cdr square))))
+    (format nil "s_~a_~a" x y)))
+
+
+(defun the-symbol-definitions ()
+  (loop for x from 1 to 10 do
+    (loop for y from 1 to 10 do
+	(let ((square (list x y)))
+	  (format t "(declare-const ~a bool)~%"(make-z3-symbol square))))))
+
+
+
+(defun traverse ()
+  (loop for x from 1 to 10 do
+    (loop for y from 1 to 10 do
+      (let ((neighbours (list (list (- x 1) y)
+			      (list (+ x 1) y)
+			      (list x (- y 1))
+			      (list x (+ y 1)))))
+	(let ((square (list x y))
+	      (true-neighbours (remove-if-not #'on-board-p neighbours)))
+	  (format t "~%;;neighbours of ~a => ~a ~%" (make-z3-symbol square) true-neighbours)
+
+	  (let ((len (length true-neighbours)))
+	    (cond
+	      ((= len 2) (tc::corner square true-neighbours))
+	      ((= len 3) (tc::edge square true-neighbours))
+	      ((= len 4) (tc::internal square true-neighbours))
+	      (t (error "cannot exist")))))
+	t))))
+
+
+	    
+
+
+
 
 (defun conclusion ()
   (format t "(check-sat)~%")
   (format t "(get-model)~%"))
 
-;; for uiop:run-program ;; shell out
-(ql:quickload :uiop) 
-
-;; a big list of solutions found 
-(defparameter *solutions* nil)
-;;(defparameter symbol-hash (make-
-
-(defparameter symbol-hash (make-hash-table :test #'eq)) ;;qualp))
 (defun fill-symbol-hash ()
   (loop for x from 1 to 10 do
     (loop for y from 1 to 10 do
@@ -191,13 +197,86 @@ side logic
 	(setf (gethash key symbol-hash) value)))))
 
 
-(defparameter solution-hash (make-hash-table :test #'equalp))
 (defun reset-solution-hash ()
   (loop for x from 1 to 10 do
     (loop for y from 1 to 10 do
       (let ((key (list x y))
 	    (value 'dummy))
 	(setf (gethash key solution-hash) value)))))
+
+
+;; seq (DEFINE-FUN S_9_8 NIL BOOL TRUE)
+(defun decode (seq)
+  (let ((s (second seq))
+	(value (fifth seq)))
+    (let ((square (format nil "~a" (gethash s symbol-hash))))
+      ;;(format t "SEQ = ~a : (~a) : (~a) ~%" seq (second seq) (fifth seq))
+      (cond
+	((equalp value 'true)
+	 (format t "~a <- ~a ~%" square 'true)
+	 (setf (gethash square solution-hash ) 'must))
+	
+	((equalp value 'false)
+	 ;;(format t "~a <- ~a ~%" square 'false)
+	 (setf (gethash square solution-hash ) 'cant))
+	 
+	(t (error "expected true or false"))))))
+
+
+;; go to stdout
+(defun show-solution-grid ()
+  (format t "~%")
+  (loop for y from 1 to 10 do
+    (loop for x from 1 to 10 do
+      (let* ((square (list x y))
+	     (str-square (format nil "~a" square)))
+	;;(format t "looking at square (~a)~%" str-square)
+	(let ((val (gethash str-square solution-hash)))
+	  (cond
+	    ((eq val 'must) (format t "x"))
+	    ((eq val 'cant) (format t "o"))
+	    (t
+	     (format t "dirty solution hash on ~a ~%" val)
+	     (error "dirty solution hash values"))))))
+    (format t "~%")))
+
+
+;; go to 
+(defun show-solution-as-smalltalk ()
+  (with-open-file (*standard-output* "quinto-z3-solutions.st"
+                                   :direction :output
+                                   :if-exists :append)  
+  (format t "{")
+  (loop for y from 1 to 10 do
+    (loop for x from 1 to 10 do
+      (let* ((square (list x y))
+	     (str-square (format nil "~a" square)))
+	;;(format t "looking at square (~a)~%" str-square)
+	(let ((val (gethash str-square solution-hash)))
+	  (cond
+	    ((eq val 'must)
+	     (format t "~a@~a . " x y)))))))
+  (format t "} . ")))
+
+
+
+(defun show-solution-as-negated-z3 ()
+  (with-open-file (*standard-output* "quinto-z3-solutions.z3"
+                                   :direction :output
+                                   :if-exists :append)  
+  (format t "~%")
+  (format t "(assert (not (and ")
+  (loop for y from 1 to 10 do
+    (loop for x from 1 to 10 do
+      (let* ((square (list x y))
+	     (str-square (format nil "~a" square)))
+	;;(format t "looking at square (~a)~%" str-square)
+	(let ((val (gethash str-square solution-hash)))
+	  (cond
+	    ((eq val 'must)
+	     (format t "s_~a_~a " x y)))))))
+  (format t ")))~%")))
+
 
 ;; can redirect stdout to file - then 
 (defun run ()
@@ -219,97 +298,55 @@ side logic
   ;; run shell script - externally run z3 -
   ;; (uiop:run-program `("z3" "auto.z3") :output "auto.z3out")
   ;; read z3 output generated
+
+  ;; open solution file 
+  
   (with-open-file (stream "auto.z3out")
     (let ((outcome (read stream)))
       (when (equalp outcome 'sat)
 	(let ((solution (read stream)))
 	  ;;(format t "outcome was ~a~%" outcome)
 	  ;;(format t "solution was ~a~%" solution)
-	  (mapcar #'decode solution)))
-      ))
-  (show-solution-grid)
-  (show-solution-as-smalltalk))
-
-
-
-
-
-
-;; seq (DEFINE-FUN S_9_8 NIL BOOL TRUE)
-(defun decode (seq)
-  (let ((s (second seq))
-	(value (fifth seq)))
-    (let ((square (format nil "~a" (gethash s symbol-hash))))
-      (format t "square is a symbol ~a ~%" (symbolp square))
-      (format t "square is a list ~a ~%" (listp square))
-      (format t "square (~a)is a string ~a ~%" square (stringp square))
-      
-      
-      ;;(format t "SEQ = ~a : (~a) : (~a) ~%" seq (second seq) (fifth seq))
-      (cond
-	((equalp value 'true)
-	 (format t "~a <- ~a ~%" square 'true)
-	 (setf (gethash square solution-hash ) 'must))
-	
-	((equalp value 'false)
-	 ;;(format t "~a <- ~a ~%" square 'false)
-	 (setf (gethash square solution-hash ) 'cant))
-	 
-	(t (error "expected true or false"))))))
-
-
-
-
-
-(defun show-solution-grid ()
-  (format t "~%")
-  (loop for y from 1 to 10 do
-    (loop for x from 1 to 10 do
-      (let* ((square (list x y))
-	     (str-square (format nil "~a" square)))
-	;;(format t "looking at square (~a)~%" str-square)
-	(let ((val (gethash str-square solution-hash)))
-	  (cond
-	    ((eq val 'must) (format t "x"))
-	    ((eq val 'cant) (format t "o"))
-	    (t
-	     (format t "dirty solution hash on ~a ~%" val)
-	     (error "dirty solution hash values"))))))
-    (format t "~%")))
-
-
-
-(defun show-solution-as-smalltalk ()
-  (format t "~%")
-  (format t "{")
-  (loop for y from 1 to 10 do
-    (loop for x from 1 to 10 do
-      (let* ((square (list x y))
-	     (str-square (format nil "~a" square)))
-	;;(format t "looking at square (~a)~%" str-square)
-	(let ((val (gethash str-square solution-hash)))
-	  (cond
-	    ((eq val 'must)
-	     (format t "~a@~a ." x y)))))))
-  (format t "}"))
-
+	  (let ((decoded (mapcar #'decode solution)))
+	      (show-solution-grid)
+	      (show-solution-as-smalltalk)
+	      (show-solution-as-negated-z3)))))))
 
 
 #|
 
-header -- generally the definitions of squares 
-
-solutions.dat  -- hold solutions found in smalltalk code
-solutions.z3   -- hold solutions found in z3 format
-
-footer -- check-sat + get model
-
-
-solutions file is initially empty
-
-
-once have initial model file
-
+cat quinto-z3-header.z3 > 
 
 |#
+
+(defun continuous ()
+
+  ;; delete any known solutions
+  ;; rm -f auto.z3
+  (uiop:run-program "rm -f auto.z3")
+  (uiop:run-program "rm -f quinto-z3-solutions.z3")
+  (uiop:run-program "rm -f quinto-z3-solutions.st")
+  (uiop:run-program "touch quinto-z3-solutions.z3")
+  (uiop:run-program "touch quinto-z3-solutions.st")
+  
+  (loop while t do 
+  ;; generally wipes auto.z3out
+  ;; build auto.z3 up again
+  (with-open-file (stream "auto.z3" :direction :output :if-exists :supersede)
+    (uiop:run-program "cat quinto-z3-header.z3" :output stream))
+  
+  (with-open-file (stream "auto.z3" :direction :output :if-exists :append)
+    (uiop:run-program "cat quinto-z3-solutions.z3" :output stream)
+    (uiop:run-program "cat quinto-z3-footer.z3" :output stream))
+
+  ;; run z3 auto.z3 -> autoz3.out
+  (with-open-file (stream "auto.z3out" :direction :output :if-exists :supersede)
+    (uiop:run-program "z3 auto.z3" :output stream))
+  ;; 
+  (run) ;; common lisp code
+
+  ;; rinse repeat
+	))
+
+
 
