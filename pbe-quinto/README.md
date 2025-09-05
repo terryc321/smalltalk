@@ -23,7 +23,7 @@ Object subclass: #Car
 becomes
 
 ```
-Object >> #Car
+Object << #Car
     slot: { #make .  #model .  #year } ; 
     package: 'Garage'
 ```

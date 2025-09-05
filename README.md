@@ -1,6 +1,12 @@
 # smalltalk
 everything smalltalk related
 
+## src directory
+
+pharo iceberg recommends an src directory inside a git repository
+
+
+
 ## sbe-quinto
 
 fantastic bit of guile scheme lisp code to solve the quinto 10 x 10 game 
