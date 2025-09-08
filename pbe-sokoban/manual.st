@@ -1,5 +1,7 @@
+#( in emacs disable smalltalk indentation with M-x electric-indent-mode )
 
-
+#( figure out what goes wrong with playground if twiddle mouse too much , like an 
+inspector on the side opens up )
 
 #( manually construct smalltalk package and classes required to play sokoban
 we should be able to file in these files to various smalltalk programs that work with morphic 
@@ -7,6 +9,8 @@ slight changes will probably need to be made regarding naming of things
 we can simply have an interface class that delegates to various versions will systems accept code that 
 ).
 
+#(cuis does not understand subclass word from workspace- workarounds? 
+pharo it works okay , how about squeak).
 
 Object subclass: #Volcano
        instanceVariableNames: ''
@@ -296,16 +300,24 @@ m3 extent: 50@50. '
 classified: 'examples'
 
 
-" ====================================================== "
+#( got sufficent control to have an area on screen where stuff can happen 
+ lets get back to solving sokoban - do we have a model in mind of how the game will 
+ work 
+ some sort of level , if get into trouble , can reset game , or skip the level 
+).
+
+
+
+
 		
+
+" ====BELOW THIS LINE RANDOM CODE SNIPPETS MAY OR MAY NOT WORK ============= "
+
 
 " how represent a sokoban using a 2d grid  "
 " how do we get a level - predesign level for a game from text file "
 " how do read a file in smalltalk "
 " how do we file out so we can read it back in from the playground - proper file out "
-
-
-
 
 
 
