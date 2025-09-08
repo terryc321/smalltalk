@@ -22,199 +22,6 @@ Sokoban compile: 'reset
 
 
 
-#(
-x x x x x 
-x a _ _ x 
-x _ b _ x 
-x _ _ c x 
-x x x x x 
-).
-Sokoban compile: 'level1
-width := 8 . 
-height := 6 . 
-board := Dictionary new . 
-  1 to: width do: [:x |   	1 to: height do: [:y |  board at: (x@y) put: $_ ]] .
-board at:(1@1) put: $x .
-board at:(2@1) put: $x .
-board at:(3@1) put: $x .
-board at:(4@1) put: $x .
-board at:(5@1) put: $x .
-board at:(1@2) put: $x .
-player := (2@2) .
-board at:(2@2) put: $a .
-board at:(3@2) put: $_ .
-board at:(4@2) put: $_ .
-board at:(5@2) put: $x .
-board at:(1@3) put: $x .
-board at:(2@3) put: $_ .
-board at:(3@3) put: $b .
-board at:(4@3) put: $_ .
-board at:(5@3) put: $x .
-board at:(1@4) put: $x .
-board at:(2@4) put: $_ .
-board at:(3@4) put: $_ .
-board at:(4@4) put: $c .
-board at:(5@4) put: $x .
-board at:(1@5) put: $x .
-board at:(2@5) put: $x .
-board at:(3@5) put: $x .
-board at:(4@5) put: $x .
-board at:(5@5) put: $x .
-' classified: 'levels' . 
-
-#(
-x x x x x x x x 
-x a _ x c _ _ x 
-x _ b x x _ _ x 
-x _ _ _ _ _ _ x 
-x _ _ x _ x _ x 
-x x x x x x x x 
-).
-Sokoban compile: 'level2
-width := 8 . 
-height := 6 . 
-board := Dictionary new . 
-  1 to: width do: [:x |   	1 to: height do: [:y |  board at: (x@y) put: $_ ]] .
-board at:(1@1) put: $x .
-board at:(2@1) put: $x .
-board at:(3@1) put: $x .
-board at:(4@1) put: $x .
-board at:(5@1) put: $x .
-board at:(6@1) put: $x .
-board at:(7@1) put: $x .
-board at:(8@1) put: $x .
-board at:(1@2) put: $x .
-player := (2@2) .
-board at:(2@2) put: $a .
-board at:(3@2) put: $_ .
-board at:(4@2) put: $x .
-board at:(5@2) put: $c .
-board at:(6@2) put: $_ .
-board at:(7@2) put: $_ .
-board at:(8@2) put: $x .
-board at:(1@3) put: $x .
-board at:(2@3) put: $_ .
-board at:(3@3) put: $b .
-board at:(4@3) put: $x .
-board at:(5@3) put: $x .
-board at:(6@3) put: $_ .
-board at:(7@3) put: $_ .
-board at:(8@3) put: $x .
-board at:(1@4) put: $x .
-board at:(2@4) put: $_ .
-board at:(3@4) put: $_ .
-board at:(4@4) put: $_ .
-board at:(5@4) put: $_ .
-board at:(6@4) put: $_ .
-board at:(7@4) put: $_ .
-board at:(8@4) put: $x .
-board at:(1@5) put: $x .
-board at:(2@5) put: $_ .
-board at:(3@5) put: $_ .
-board at:(4@5) put: $x .
-board at:(5@5) put: $_ .
-board at:(6@5) put: $x .
-board at:(7@5) put: $_ .
-board at:(8@5) put: $x .
-board at:(1@6) put: $x .
-board at:(2@6) put: $x .
-board at:(3@6) put: $x .
-board at:(4@6) put: $x .
-board at:(5@6) put: $x .
-board at:(6@6) put: $x .
-board at:(7@6) put: $x .
-board at:(8@6) put: $x .
-' classified: 'levels' . 
-
-#(
-x x x x x x x x x x 
-x a _ x c _ _ x _ x 
-x _ b x x x _ _ _ x 
-x _ _ x x x _ _ x x 
-x _ _ _ _ _ _ _ _ x 
-x _ _ x _ _ x _ _ x 
-x x x x x x x x x x 
-).
-Sokoban compile: 'level3
-width := 8 . 
-height := 6 . 
-board := Dictionary new . 
-  1 to: width do: [:x |   	1 to: height do: [:y |  board at: (x@y) put: $_ ]] .
-board at:(1@1) put: $x .
-board at:(2@1) put: $x .
-board at:(3@1) put: $x .
-board at:(4@1) put: $x .
-board at:(5@1) put: $x .
-board at:(6@1) put: $x .
-board at:(7@1) put: $x .
-board at:(8@1) put: $x .
-board at:(9@1) put: $x .
-board at:(10@1) put: $x .
-board at:(1@2) put: $x .
-player := (2@2) .
-board at:(2@2) put: $a .
-board at:(3@2) put: $_ .
-board at:(4@2) put: $x .
-board at:(5@2) put: $c .
-board at:(6@2) put: $_ .
-board at:(7@2) put: $_ .
-board at:(8@2) put: $x .
-board at:(9@2) put: $_ .
-board at:(10@2) put: $x .
-board at:(1@3) put: $x .
-board at:(2@3) put: $_ .
-board at:(3@3) put: $b .
-board at:(4@3) put: $x .
-board at:(5@3) put: $x .
-board at:(6@3) put: $x .
-board at:(7@3) put: $_ .
-board at:(8@3) put: $_ .
-board at:(9@3) put: $_ .
-board at:(10@3) put: $x .
-board at:(1@4) put: $x .
-board at:(2@4) put: $_ .
-board at:(3@4) put: $_ .
-board at:(4@4) put: $x .
-board at:(5@4) put: $x .
-board at:(6@4) put: $x .
-board at:(7@4) put: $_ .
-board at:(8@4) put: $_ .
-board at:(9@4) put: $x .
-board at:(10@4) put: $x .
-board at:(1@5) put: $x .
-board at:(2@5) put: $_ .
-board at:(3@5) put: $_ .
-board at:(4@5) put: $_ .
-board at:(5@5) put: $_ .
-board at:(6@5) put: $_ .
-board at:(7@5) put: $_ .
-board at:(8@5) put: $_ .
-board at:(9@5) put: $_ .
-board at:(10@5) put: $x .
-board at:(1@6) put: $x .
-board at:(2@6) put: $_ .
-board at:(3@6) put: $_ .
-board at:(4@6) put: $x .
-board at:(5@6) put: $_ .
-board at:(6@6) put: $_ .
-board at:(7@6) put: $x .
-board at:(8@6) put: $_ .
-board at:(9@6) put: $_ .
-board at:(10@6) put: $x .
-board at:(1@7) put: $x .
-board at:(2@7) put: $x .
-board at:(3@7) put: $x .
-board at:(4@7) put: $x .
-board at:(5@7) put: $x .
-board at:(6@7) put: $x .
-board at:(7@7) put: $x .
-board at:(8@7) put: $x .
-board at:(9@7) put: $x .
-board at:(10@7) put: $x .
-' classified: 'levels' . 
-
-
-
 
 "can i go left ,  "
 " _ a   : if decide move left need to put player at x-1 move a from where it is , to where needs to be"
@@ -586,7 +393,8 @@ Sokoban compile: 'initialize
  super initialize.
  self color: Color blue .  
  self position: 300@300 . 
- self extent: 600@600.  
+ self extent: 600@600.
+ self level1 .  
  self openInWorld.'
 classified: 'startup'.
 
@@ -647,7 +455,6 @@ classified: 'model'.
 "$b box"
 " === can cope with being moved on screen  === "
 Sokoban compile: 'drawOn: aCanvas
-drawOn: aCanvas
  | val c ownerPos px py px2 py2 origin corner cellWidth cellHeight |
  width isNil ifTrue:[ ^false]. 
  height isNil ifTrue: [ ^false].  
@@ -683,6 +490,334 @@ drawOn: aCanvas
 " === SokobanWallCell - acts as a wall ==="
 " === SokobanTargetCell - acts as an empty cell but displays itself differently ==="
 " === SokobanEmptyCell - acts as an empty cell ==="
+
+#(
+x x x x x 
+x a _ _ x 
+x _ b _ x 
+x _ _ _ x 
+x x x x x 
+).
+Sokoban compile: 'level1
+width := 5 . 
+height := 5 . 
+board := Dictionary new . 
+  1 to: width do: [:x |   	1 to: height do: [:y |  board at: (x@y) put: $_ ]] .
+board at:(1@1) put: $x .
+board at:(2@1) put: $x .
+board at:(3@1) put: $x .
+board at:(4@1) put: $x .
+board at:(5@1) put: $x .
+board at:(1@2) put: $x .
+player := (2@2) .
+board at:(2@2) put: $a .
+board at:(3@2) put: $_ .
+board at:(4@2) put: $_ .
+board at:(5@2) put: $x .
+board at:(1@3) put: $x .
+board at:(2@3) put: $_ .
+board at:(3@3) put: $b .
+board at:(4@3) put: $_ .
+board at:(5@3) put: $x .
+board at:(1@4) put: $x .
+board at:(2@4) put: $_ .
+board at:(3@4) put: $_ .
+board at:(4@4) put: $_ .
+board at:(5@4) put: $x .
+board at:(1@5) put: $x .
+board at:(2@5) put: $x .
+board at:(3@5) put: $x .
+board at:(4@5) put: $x .
+board at:(5@5) put: $x .
+ self changed . ' classified: 'levels' . 
+
+#(
+x x x x x x x x 
+x a _ x c _ _ x 
+x _ b x x _ _ x 
+x _ _ _ _ _ _ x 
+x _ _ x _ x _ x 
+x x x x x x x x 
+).
+Sokoban compile: 'level2
+width := 8 . 
+height := 6 . 
+board := Dictionary new . 
+  1 to: width do: [:x |   	1 to: height do: [:y |  board at: (x@y) put: $_ ]] .
+board at:(1@1) put: $x .
+board at:(2@1) put: $x .
+board at:(3@1) put: $x .
+board at:(4@1) put: $x .
+board at:(5@1) put: $x .
+board at:(6@1) put: $x .
+board at:(7@1) put: $x .
+board at:(8@1) put: $x .
+board at:(1@2) put: $x .
+player := (2@2) .
+board at:(2@2) put: $a .
+board at:(3@2) put: $_ .
+board at:(4@2) put: $x .
+board at:(5@2) put: $c .
+board at:(6@2) put: $_ .
+board at:(7@2) put: $_ .
+board at:(8@2) put: $x .
+board at:(1@3) put: $x .
+board at:(2@3) put: $_ .
+board at:(3@3) put: $b .
+board at:(4@3) put: $x .
+board at:(5@3) put: $x .
+board at:(6@3) put: $_ .
+board at:(7@3) put: $_ .
+board at:(8@3) put: $x .
+board at:(1@4) put: $x .
+board at:(2@4) put: $_ .
+board at:(3@4) put: $_ .
+board at:(4@4) put: $_ .
+board at:(5@4) put: $_ .
+board at:(6@4) put: $_ .
+board at:(7@4) put: $_ .
+board at:(8@4) put: $x .
+board at:(1@5) put: $x .
+board at:(2@5) put: $_ .
+board at:(3@5) put: $_ .
+board at:(4@5) put: $x .
+board at:(5@5) put: $_ .
+board at:(6@5) put: $x .
+board at:(7@5) put: $_ .
+board at:(8@5) put: $x .
+board at:(1@6) put: $x .
+board at:(2@6) put: $x .
+board at:(3@6) put: $x .
+board at:(4@6) put: $x .
+board at:(5@6) put: $x .
+board at:(6@6) put: $x .
+board at:(7@6) put: $x .
+board at:(8@6) put: $x .
+ self changed . ' classified: 'levels' . 
+
+#(
+x x x x x x x x x x 
+x a _ x _ _ _ x _ x 
+x _ b x x x _ _ _ x 
+x _ _ x x x _ _ x x 
+x _ _ _ _ _ _ _ _ x 
+x _ _ x _ _ x _ _ x 
+x x x x x x x x x x 
+).
+Sokoban compile: 'level3
+width := 10 . 
+height := 7 . 
+board := Dictionary new . 
+  1 to: width do: [:x |   	1 to: height do: [:y |  board at: (x@y) put: $_ ]] .
+board at:(1@1) put: $x .
+board at:(2@1) put: $x .
+board at:(3@1) put: $x .
+board at:(4@1) put: $x .
+board at:(5@1) put: $x .
+board at:(6@1) put: $x .
+board at:(7@1) put: $x .
+board at:(8@1) put: $x .
+board at:(9@1) put: $x .
+board at:(10@1) put: $x .
+board at:(1@2) put: $x .
+player := (2@2) .
+board at:(2@2) put: $a .
+board at:(3@2) put: $_ .
+board at:(4@2) put: $x .
+board at:(5@2) put: $_ .
+board at:(6@2) put: $_ .
+board at:(7@2) put: $_ .
+board at:(8@2) put: $x .
+board at:(9@2) put: $_ .
+board at:(10@2) put: $x .
+board at:(1@3) put: $x .
+board at:(2@3) put: $_ .
+board at:(3@3) put: $b .
+board at:(4@3) put: $x .
+board at:(5@3) put: $x .
+board at:(6@3) put: $x .
+board at:(7@3) put: $_ .
+board at:(8@3) put: $_ .
+board at:(9@3) put: $_ .
+board at:(10@3) put: $x .
+board at:(1@4) put: $x .
+board at:(2@4) put: $_ .
+board at:(3@4) put: $_ .
+board at:(4@4) put: $x .
+board at:(5@4) put: $x .
+board at:(6@4) put: $x .
+board at:(7@4) put: $_ .
+board at:(8@4) put: $_ .
+board at:(9@4) put: $x .
+board at:(10@4) put: $x .
+board at:(1@5) put: $x .
+board at:(2@5) put: $_ .
+board at:(3@5) put: $_ .
+board at:(4@5) put: $_ .
+board at:(5@5) put: $_ .
+board at:(6@5) put: $_ .
+board at:(7@5) put: $_ .
+board at:(8@5) put: $_ .
+board at:(9@5) put: $_ .
+board at:(10@5) put: $x .
+board at:(1@6) put: $x .
+board at:(2@6) put: $_ .
+board at:(3@6) put: $_ .
+board at:(4@6) put: $x .
+board at:(5@6) put: $_ .
+board at:(6@6) put: $_ .
+board at:(7@6) put: $x .
+board at:(8@6) put: $_ .
+board at:(9@6) put: $_ .
+board at:(10@6) put: $x .
+board at:(1@7) put: $x .
+board at:(2@7) put: $x .
+board at:(3@7) put: $x .
+board at:(4@7) put: $x .
+board at:(5@7) put: $x .
+board at:(6@7) put: $x .
+board at:(7@7) put: $x .
+board at:(8@7) put: $x .
+board at:(9@7) put: $x .
+board at:(10@7) put: $x .
+ self changed . ' classified: 'levels' . 
+
+#(
+x x x x x x x x x x x x x 
+x a _ x _ _ _ _ _ _ x _ x 
+x _ b x _ b _ x x _ _ _ x 
+x _ _ x _ _ x x x b _ x x 
+x x _ _ b x x _ x _ _ _ x 
+x x _ _ _ _ x _ b _ _ x x 
+x x x _ _ _ b _ _ _ x x x 
+x x x x _ _ _ _ _ x x x x 
+x x x x x x x x x x x x x 
+).
+Sokoban compile: 'level4
+width := 13 . 
+height := 9 . 
+board := Dictionary new . 
+  1 to: width do: [:x |   	1 to: height do: [:y |  board at: (x@y) put: $_ ]] .
+board at:(1@1) put: $x .
+board at:(2@1) put: $x .
+board at:(3@1) put: $x .
+board at:(4@1) put: $x .
+board at:(5@1) put: $x .
+board at:(6@1) put: $x .
+board at:(7@1) put: $x .
+board at:(8@1) put: $x .
+board at:(9@1) put: $x .
+board at:(10@1) put: $x .
+board at:(11@1) put: $x .
+board at:(12@1) put: $x .
+board at:(13@1) put: $x .
+board at:(1@2) put: $x .
+player := (2@2) .
+board at:(2@2) put: $a .
+board at:(3@2) put: $_ .
+board at:(4@2) put: $x .
+board at:(5@2) put: $_ .
+board at:(6@2) put: $_ .
+board at:(7@2) put: $_ .
+board at:(8@2) put: $_ .
+board at:(9@2) put: $_ .
+board at:(10@2) put: $_ .
+board at:(11@2) put: $x .
+board at:(12@2) put: $_ .
+board at:(13@2) put: $x .
+board at:(1@3) put: $x .
+board at:(2@3) put: $_ .
+board at:(3@3) put: $b .
+board at:(4@3) put: $x .
+board at:(5@3) put: $_ .
+board at:(6@3) put: $b .
+board at:(7@3) put: $_ .
+board at:(8@3) put: $x .
+board at:(9@3) put: $x .
+board at:(10@3) put: $_ .
+board at:(11@3) put: $_ .
+board at:(12@3) put: $_ .
+board at:(13@3) put: $x .
+board at:(1@4) put: $x .
+board at:(2@4) put: $_ .
+board at:(3@4) put: $_ .
+board at:(4@4) put: $x .
+board at:(5@4) put: $_ .
+board at:(6@4) put: $_ .
+board at:(7@4) put: $x .
+board at:(8@4) put: $x .
+board at:(9@4) put: $x .
+board at:(10@4) put: $b .
+board at:(11@4) put: $_ .
+board at:(12@4) put: $x .
+board at:(13@4) put: $x .
+board at:(1@5) put: $x .
+board at:(2@5) put: $x .
+board at:(3@5) put: $_ .
+board at:(4@5) put: $_ .
+board at:(5@5) put: $b .
+board at:(6@5) put: $x .
+board at:(7@5) put: $x .
+board at:(8@5) put: $_ .
+board at:(9@5) put: $x .
+board at:(10@5) put: $_ .
+board at:(11@5) put: $_ .
+board at:(12@5) put: $_ .
+board at:(13@5) put: $x .
+board at:(1@6) put: $x .
+board at:(2@6) put: $x .
+board at:(3@6) put: $_ .
+board at:(4@6) put: $_ .
+board at:(5@6) put: $_ .
+board at:(6@6) put: $_ .
+board at:(7@6) put: $x .
+board at:(8@6) put: $_ .
+board at:(9@6) put: $b .
+board at:(10@6) put: $_ .
+board at:(11@6) put: $_ .
+board at:(12@6) put: $x .
+board at:(13@6) put: $x .
+board at:(1@7) put: $x .
+board at:(2@7) put: $x .
+board at:(3@7) put: $x .
+board at:(4@7) put: $_ .
+board at:(5@7) put: $_ .
+board at:(6@7) put: $_ .
+board at:(7@7) put: $b .
+board at:(8@7) put: $_ .
+board at:(9@7) put: $_ .
+board at:(10@7) put: $_ .
+board at:(11@7) put: $x .
+board at:(12@7) put: $x .
+board at:(13@7) put: $x .
+board at:(1@8) put: $x .
+board at:(2@8) put: $x .
+board at:(3@8) put: $x .
+board at:(4@8) put: $x .
+board at:(5@8) put: $_ .
+board at:(6@8) put: $_ .
+board at:(7@8) put: $_ .
+board at:(8@8) put: $_ .
+board at:(9@8) put: $_ .
+board at:(10@8) put: $x .
+board at:(11@8) put: $x .
+board at:(12@8) put: $x .
+board at:(13@8) put: $x .
+board at:(1@9) put: $x .
+board at:(2@9) put: $x .
+board at:(3@9) put: $x .
+board at:(4@9) put: $x .
+board at:(5@9) put: $x .
+board at:(6@9) put: $x .
+board at:(7@9) put: $x .
+board at:(8@9) put: $x .
+board at:(9@9) put: $x .
+board at:(10@9) put: $x .
+board at:(11@9) put: $x .
+board at:(12@9) put: $x .
+board at:(13@9) put: $x .
+ self changed . ' classified: 'levels' .
+
 
 
 

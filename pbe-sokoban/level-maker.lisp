@@ -39,16 +39,25 @@ output as smalltalk code
 
 (ql:quickload :uiop)
 
+(defpackage :foo
+  (:use :cl))
+(in-package :foo)
+
+
+;; remove spaces from string
+(defun remove-spaces-from-string (s)
+  (remove #\tab (remove #\space s)))
+
+
+
+
+
 #|
 (defparameter *board* 
    (uiop:read-file-lines "level1.txt"))
 
 (defparameter *board2* (remove-if (lambda (s) (= (length s) 0))
 				  *board*))
-
-;; remove spaces from string
-(defun remove-spaces-from-string (s)
-  (remove #\tab (remove #\space s)))
 
 
 (defparameter *original-string* "a a a a a a a ")
@@ -66,7 +75,7 @@ output as smalltalk code
 
 (defun level-reader(filename)
   ;; strip postfix .txt from filename 
-  (setq func-name (subseq filename 0 (- (length filename) 4)))
+  (let ((func-name (subseq filename 0 (- (length filename) 4))))
   (let* ((board (mapcar #'remove-spaces-from-string 
 			(remove-if (lambda (s) (= (length s) 0)) 
 				   (uiop:read-file-lines filename))))
@@ -77,15 +86,12 @@ output as smalltalk code
     ;;
     ;; show text preview
     (format t "~%#(")
-    (let ((x 0)(y 0))
-      (loop for str in board do
-	(incf y)
-	(setq x 1)
-	(format t "~%")
-	(let ((strlist (coerce str 'list)))
-	  (loop for ch in strlist do 
-	    (format t "~a " ch))))
-	(format t "~%).~%"))
+    (loop for str in board do
+      (format t "~%")
+      (let ((strlist (coerce str 'list)))
+	(loop for ch in strlist do 
+	  (format t "~a " ch))))
+    (format t "~%).~%")
     ;; 
     ;; generate actual smalltalk code
     ;;
@@ -104,7 +110,9 @@ output as smalltalk code
 	      (format t "player := (~a@~a) .~%" x y) )
 	    (format t "board at:(~a@~a) put: $~a .~%" x y ch) 
 	    (incf x)))))
-    (format t " self changed . ' classified: 'levels' . ~%")))
+    (format t " self changed . ' classified: 'levels' . ~%"))))
+
+
 
 
 
