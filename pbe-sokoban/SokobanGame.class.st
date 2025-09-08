@@ -797,23 +797,6 @@ SokobanGame >> newBoxAt: x by: y [
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ]
 
 { #category : 'tests - todo' }
@@ -860,11 +843,6 @@ SokobanGame >> step [
  " player position: (p x) + 1 @ (p y) + 1  . "
  self submorphsDo: [ :o | o updateScreenPosition ] .
 
-
-
-
- 
-
 ]
 
 { #category : 'file paths' }
@@ -879,3 +857,5 @@ SokobanGame >> wantsSteps [
  ^ true 
 
 ]
+
+

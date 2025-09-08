@@ -1,10 +1,14 @@
 
 "BorderedBoxMorph for cuis perhaps"
-BorderedMorph subclass: #Sokoban
+"BorderedMorph for pharo"
+
+Object subclass: #Sokoban
        instanceVariableNames: 'width height board player'
        classVariableNames: ''
        package: 'PBE-Sokoban'.
 
+
+" ==== everything below this line can be read directly from the workspace ==== "
 
 Sokoban compile: 'initialize
     super initialize.
@@ -139,7 +143,7 @@ Sokoban compile: 'showBoard
  classified: 'show'.
 
 
-
+" === this section is visual confirmation but does not  ==== "
 
 " use Ctrl D to do it - a text based interactive gui "
 soko := Sokoban new. 
