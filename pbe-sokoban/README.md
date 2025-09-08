@@ -5,6 +5,20 @@
 
 this file contains a simple model that can represent any sokoban board 
 
+Sokoban class
+
+## soko.st
+
+this file contains a front end gui in smalltalk 
+
+in order to do this we need to give view access to sokoban 
+
+SokobanView class 
+
+## 
+
+pharo 12 - SOKOBAN image continue ...
+
 ```
 
 width - width of board
