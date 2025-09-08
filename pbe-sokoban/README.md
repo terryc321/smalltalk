@@ -5,17 +5,64 @@
 
 this file contains a simple model that can represent any sokoban board 
 
-Sokoban class
+can paste this pharo 12 workspace and click DoIt 
 
-## soko.st
+if complains Sokoban class missing just put this into goofy popup window
 
-this file contains a front end gui in smalltalk 
+```
+BorderedMorph << Sokoban
+ slots: { #width . #height . #player . #board }
+ ...
+ package: 'PBE-Sokoban' .
+```
 
-in order to do this we need to give view access to sokoban 
+```
+s := Sokoban new.
+s level1.
+s level2.
+s level3.
+s level4. 
+s reset. 
 
-SokobanView class 
+Keys 
+W A S D or Arrow Keys
+Esc key resets to level1 again , no progress through levels yet ... todo , 
 
-## 
+no sound 
+requires mouse to be over Playfield for keyboard focus
+
+just to show mechanics of moving a piece around board 
+
+boards can be written using text editor and produced using sbcl lisp 
+
+_ empty square 
+a player 
+b box 
+x wall 
+
+ensure all lines have same number of visible characters a b x or _ underscore
+empty lines ignored
+spaces tabs ignored 
+
+ab_
+___
+
+same game as 
+
+a b _
+_ _ _ 
+
+
+game files end in .txt 
+(level-maker "level5.txt")
+ ... spews out ... code ...
+ ... spews out ... code ...
+ ... spews out ... code ...
+ ... spews out ... code ...
+ ... spews out ... code ...
+
+```
+
 
 pharo 12 - SOKOBAN image continue ...
 
