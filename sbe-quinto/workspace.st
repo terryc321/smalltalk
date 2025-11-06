@@ -12,9 +12,8 @@ in total there are
 ==========================
 | tmp |
 tmp := SBEGame new openInWorld. 
-(tmp solutions) size. 
+(tmp solutions) size. 1024 
 " 1024  solutions apparently"
-tmp delete.
 
 ==========================
 there are 4 solutions of length 30
@@ -33,29 +32,25 @@ there are 144 solutions of length 56
 there are 144 solutions of length 58
 ===========================
 
-True .  True 
-False .  False 
 
-SBEGame browse. 
 " To make a new board visible to player " 
 s := SBEGame new openInWorld.
 s reset.
 s delete.
 " move board to middle of screen somewhere "
 s position: 600@300.
-s openInWorld.
 
 " here is a solution animated "
 s setMovesSpeed: 0.5 moves:{1@1 . 2@1 . 5@1 . 6@1 . 9@1 . 10@1 . 3@3 . 4@3 . 7@3 . 8@3 . 1@4 . 10@4 . 1@5 . 5@5 . 6@5 . 10@5 . 3@6 . 8@6 . 3@7 . 8@7 . 1@8 . 5@8 . 6@8 . 10@8 . 1@9 . 10@9 . 3@10 . 4@10 . 7@10 . 8@10}.
 
 "get all solutions of a 10x10 grid "
 s reset.
+"interrupt by pressing alt dot  M-. "
 s solutions do: [ :sol |
 	s setMovesSpeed: 0.01 moves: sol ].
 
 "check all solutions "
 s checkSolutions.  #(#('confirmed solutions ie wins = ' 1024) #('faulty solutions ie loses = ' 0) #('longest solutions =' 58) #('shortest solution = ' 30)) 
-  #(#('confirmed solutions ie wins = ' 1024) #('faulty solutions ie loses = ' 0) #('longest solutions =' 58) #('shortest solution = ' 30)) 
 
 " we are done - we can delete this thing" 
 s delete.

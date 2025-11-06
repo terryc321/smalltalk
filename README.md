@@ -5,6 +5,7 @@ everything smalltalk related
 
 pharo iceberg recommends an src directory inside a git repository
 
+pharo 13 stable and unstable can both be crashy
 
 
 ## sbe-quinto

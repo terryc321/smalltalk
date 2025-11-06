@@ -1,0 +1,203 @@
+sat
+(
+  (define-fun s_9_8 () bool
+    true)
+  (define-fun s_6_3 () bool
+    true)
+  (define-fun s_6_5 () bool
+    true)
+  (define-fun s_2_3 () bool
+    true)
+  (define-fun s_8_3 () bool
+    false)
+  (define-fun s_8_2 () bool
+    true)
+  (define-fun s_2_5 () bool
+    true)
+  (define-fun s_1_4 () bool
+    false)
+  (define-fun s_4_8 () bool
+    true)
+  (define-fun s_10_5 () bool
+    true)
+  (define-fun s_2_9 () bool
+    true)
+  (define-fun s_5_8 () bool
+    false)
+  (define-fun s_6_6 () bool
+    false)
+  (define-fun s_4_3 () bool
+    false)
+  (define-fun s_6_2 () bool
+    true)
+  (define-fun s_3_6 () bool
+    false)
+  (define-fun s_7_3 () bool
+    false)
+  (define-fun s_4_2 () bool
+    true)
+  (define-fun s_7_10 () bool
+    false)
+  (define-fun s_2_6 () bool
+    true)
+  (define-fun s_10_10 () bool
+    false)
+  (define-fun s_8_7 () bool
+    false)
+  (define-fun s_5_7 () bool
+    false)
+  (define-fun s_8_10 () bool
+    false)
+  (define-fun s_6_4 () bool
+    false)
+  (define-fun s_1_8 () bool
+    true)
+  (define-fun s_8_1 () bool
+    false)
+  (define-fun s_8_5 () bool
+    true)
+  (define-fun s_7_7 () bool
+    false)
+  (define-fun s_9_7 () bool
+    true)
+  (define-fun s_4_6 () bool
+    false)
+  (define-fun s_10_4 () bool
+    false)
+  (define-fun s_7_4 () bool
+    false)
+  (define-fun s_7_6 () bool
+    true)
+  (define-fun s_4_9 () bool
+    false)
+  (define-fun s_3_7 () bool
+    false)
+  (define-fun s_3_9 () bool
+    true)
+  (define-fun s_5_4 () bool
+    true)
+  (define-fun s_3_10 () bool
+    true)
+  (define-fun s_10_9 () bool
+    true)
+  (define-fun s_2_10 () bool
+    false)
+  (define-fun s_10_6 () bool
+    false)
+  (define-fun s_3_1 () bool
+    true)
+  (define-fun s_6_10 () bool
+    false)
+  (define-fun s_7_5 () bool
+    false)
+  (define-fun s_1_9 () bool
+    true)
+  (define-fun s_5_1 () bool
+    true)
+  (define-fun s_8_8 () bool
+    true)
+  (define-fun s_5_10 () bool
+    false)
+  (define-fun s_7_8 () bool
+    true)
+  (define-fun s_8_9 () bool
+    true)
+  (define-fun s_5_5 () bool
+    true)
+  (define-fun s_8_4 () bool
+    true)
+  (define-fun s_2_1 () bool
+    true)
+  (define-fun s_1_6 () bool
+    false)
+  (define-fun s_2_2 () bool
+    true)
+  (define-fun s_7_9 () bool
+    true)
+  (define-fun s_10_8 () bool
+    false)
+  (define-fun s_1_7 () bool
+    true)
+  (define-fun s_1_2 () bool
+    false)
+  (define-fun s_3_2 () bool
+    true)
+  (define-fun s_5_6 () bool
+    false)
+  (define-fun s_9_9 () bool
+    true)
+  (define-fun s_9_1 () bool
+    true)
+  (define-fun s_7_1 () bool
+    true)
+  (define-fun s_2_4 () bool
+    true)
+  (define-fun s_7_2 () bool
+    false)
+  (define-fun s_3_5 () bool
+    false)
+  (define-fun s_2_7 () bool
+    false)
+  (define-fun s_4_4 () bool
+    false)
+  (define-fun s_9_6 () bool
+    true)
+  (define-fun s_3_4 () bool
+    true)
+  (define-fun s_10_7 () bool
+    true)
+  (define-fun s_9_10 () bool
+    false)
+  (define-fun s_9_2 () bool
+    true)
+  (define-fun s_4_7 () bool
+    false)
+  (define-fun s_1_10 () bool
+    true)
+  (define-fun s_10_2 () bool
+    false)
+  (define-fun s_4_10 () bool
+    false)
+  (define-fun s_3_3 () bool
+    false)
+  (define-fun s_4_5 () bool
+    true)
+  (define-fun s_10_1 () bool
+    false)
+  (define-fun s_1_1 () bool
+    true)
+  (define-fun s_2_8 () bool
+    true)
+  (define-fun s_1_3 () bool
+    true)
+  (define-fun s_9_5 () bool
+    true)
+  (define-fun s_4_1 () bool
+    true)
+  (define-fun s_6_8 () bool
+    true)
+  (define-fun s_6_7 () bool
+    true)
+  (define-fun s_6_1 () bool
+    true)
+  (define-fun s_6_9 () bool
+    true)
+  (define-fun s_5_2 () bool
+    true)
+  (define-fun s_1_5 () bool
+    true)
+  (define-fun s_5_3 () bool
+    false)
+  (define-fun s_8_6 () bool
+    true)
+  (define-fun s_9_3 () bool
+    true)
+  (define-fun s_10_3 () bool
+    false)
+  (define-fun s_3_8 () bool
+    true)
+  (define-fun s_9_4 () bool
+    false)
+  (define-fun s_5_9 () bool
+    true)
+)
