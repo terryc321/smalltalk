@@ -1,0 +1,12 @@
+%%%% Starting test sort-test
+Group begin: sort-test
+Test begin:
+  source-file: "/home/terry/code/smalltalk/sbe-quinto/scheme/simple-guile2.scm"
+  source-line: 771
+  source-form: (test-equal output-desired (sort input coord-compare))
+Test end:
+  result-kind: pass
+  actual-value: ((1 1) (1 2) (1 2) (1 3) (2 1) (2 2) (2 3) (3 1) (3 2) (3 3))
+  expected-value: ((1 1) (1 2) (1 2) (1 3) (2 1) (2 2) (2 3) (3 1) (3 2) (3 3))
+Group end: sort-test
+# of expected passes      1
