@@ -1,4 +1,6 @@
 
+
+
 // these are globals 
 var canvas = null;
 var ctx = null;
@@ -11,7 +13,16 @@ function setup (){
     canvas.addEventListener("mousemove", (event) => { mouseMoveOnCanvas(event) });
     canvas.addEventListener("mousedown", (event) => { mouseDownOnCanvas(event) });
     canvas.addEventListener("mouseup", (event) => { mouseUpOnCanvas(event) });
-    line();
+    // can we add another event listener to mouse move ?
+    canvas.addEventListener("mousemove", (event) => { rectangleMouseMove(event) });
+
+    for (let x = 0; x < 1000 ; x = x + 200){
+	for (let y = 300; y < 750; y = y + 50){
+	    makeRectangle(x,y,100,40);
+	}
+    }
+
+    draw();
 }
 
 function getMousePos (canvas , evt){
@@ -55,13 +66,13 @@ function fillCircle (){
 function emptyCircle (){
     ctx.beginPath();
     ctx.arc(195, 50, 40, 0, 2 * Math.PI);
-    ctx.lineWidth = 10;
+    ctx.lineWidth = 2;
     ctx.strokeStyle = "blue";
     ctx.stroke();
 }
 
 
-function line (){
+function draw (){
     //var c = document.getElementById("myCanvas");
     //var ctx = c.getContext("2d");
     
@@ -93,6 +104,14 @@ function line (){
     //
     emptyRectangle();
     fillRectangle();
+
+    
+    // makeRectangle(250,100,100,40);
+    // makeRectangle(450,100,100,40);
+    // makeRectangle(650,100,100,40);
+    // makeRectangle(250,200,100,40);
+    // makeRectangle(450,200,100,40);
+    // makeRectangle(650,200,100,40);
     
 }
 
