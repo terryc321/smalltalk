@@ -1,4 +1,5 @@
 
+// these are globals 
 var canvas = null;
 var ctx = null;
 
@@ -44,12 +45,27 @@ function mouseDownOnCanvas (evt){
     //ctx.fillText("Hello World", pos.x , pos.y);
 }
 
+function fillCircle (){
+    ctx.beginPath();
+    ctx.arc(95, 50, 40, 0, 2 * Math.PI);
+    ctx.fillStyle = "red";
+    ctx.fill();
+}
+
+function emptyCircle (){
+    ctx.beginPath();
+    ctx.arc(195, 50, 40, 0, 2 * Math.PI);
+    ctx.lineWidth = 10;
+    ctx.strokeStyle = "blue";
+    ctx.stroke();
+}
+
 
 function line (){
     //var c = document.getElementById("myCanvas");
     //var ctx = c.getContext("2d");
     
-    ctx = canvas.getContext("2d");
+    
     ctx.moveTo(0, 0);
     ctx.lineTo(200, 100);
     ctx.stroke();
@@ -67,6 +83,16 @@ function line (){
     ctx.font = "30px Arial";
     ctx.strokeText("Hello World", 10, 100);
 
+    // circles 
+    fillCircle();
+    emptyCircle();
+
+    // beziers
+    bezierCurve();
+
+    //
+    emptyRectangle();
+    fillRectangle();
     
 }
 
