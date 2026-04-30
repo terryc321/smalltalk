@@ -1,4 +1,31 @@
 
+# Develop 
+
+Given an RSChart and want to see what it looks like - just call open.
+
+```
+RSChartExample new example01Markers open. 
+```
+
+
+
+```
+"run each example - get the window - convert to screenshot - save file in 
+particular directory then close that window.
+how find what window opened ?
+"
+Transcript clear.
+(RSChartExample methodDict keys)  asSortedCollection do: [ :name |
+	Transcript show: '#' , name ; cr .
+"	Transcript show: '```smalltalk' , cr .
+	Transcript show: '```' , cr .
+"	
+	Transcript show: '![Alt Text](images/' , name , '.png)' ; cr ; cr.
+ ].
+```
+
+
+
 # RSChart 
 
 ```smalltalk
@@ -7,6 +34,12 @@ class RSChartExample
 
 pharo 13 with full roassal loaded
 ```
+
+```smalltalk
+"get all methods that has pragma script"
+MyClass classSide allMethods select: [:method | method hasPragma: #script]
+```
+
 
 ## example01Markers
 
@@ -92,9 +125,26 @@ example04WithTick
 
 ## example05WithTick
 
+```
+example05WithTick
+	<script: 'self new example05WithTick show'>
+	| x c |
+	x := 0.0 to: 14 count: 100.
+	c := RSCompositeChart new.
+	1 to: 7 do: [ :i |
+		c add: (RSLinePlot new x: x y: (i * 0.3 + x) sin * (7 - i))
+	].
+	c verticalTick integer.
+	c horizontalTick integer.
+	^ c
+```
+
+![Alt Text](images/example05WithTick.png)
 
 
 ## example06CustomNumberOfTicks
+
+
 
 ## example07AdjustingFontSize
 
