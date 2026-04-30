@@ -12,9 +12,15 @@ class RSChartExample
 
 ## example02ScatterPlot
 
+![Alt Text](images/example02ScatterPlot.png)
+
 ## example03Plot
 
+![Alt Text](images/example03Plot.png)
+
 ## example04WithTick
+
+![Alt Text](images/example04WithTick.png)
 
 ## example05WithTick
 
