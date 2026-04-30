@@ -7,19 +7,23 @@ puzzleInputParsed
 	and 1 line with 1000 math symbols either #+ addition or #* multiplication "
 
 	| lines lines2 lines3 |
-	lines := (self puzzleInput splitBy: String cr).
-	lines2 := lines collect: [ :line | line splitBy: String space] .
+	lines := self puzzleInput splitOn: String cr.
+	lines2 := lines collect: [ :line | line splitOn: String space ].
 	lines3 := OrderedCollection new.
 	lines2 do: [ :line |
-		| ns |
-		ns := OrderedCollection new.
-		line do: [ :str |
-			| alldigits |
-			alldigits := true.
-			str do: [:e | (e isDigit = false) ifTrue:[alldigits := false] ].			(str = '') ifTrue: [alldigits := false]			              ifFalse: [
-			alldigits ifTrue: [ns add: str asInteger]
-			          ifFalse: [ns add: str asSymbol]]].				  
-		lines3 add: ns ].
-	^ lines3 .	
+			| ns |
+			ns := OrderedCollection new.
+			line do: [ :str |
+					| alldigits |
+					alldigits := true.
+					str do: [ :e | e isDigit ifFalse: [ alldigits := false ] ].
+					str = ''
+						ifTrue: [ alldigits := false ]
+						ifFalse: [
+								alldigits
+									ifTrue: [ ns add: str asInteger ]
+									ifFalse: [ ns add: str asSymbol ] ] ].
+			lines3 add: ns ].
+	^ lines3
 	! !
 
