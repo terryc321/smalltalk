@@ -1,1 +1,0 @@
-#Learn Roassal RSChart , in Pharo 13!
