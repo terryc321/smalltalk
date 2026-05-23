@@ -1,6 +1,18 @@
 
 # Microdown 
 
+## Pharo 13
+
+playground
+
+```
+ref := (MicResourceReference fromUri: 'file:///home/terry/code/NewPharoByExample9/Chapters/BasicClasses/BasicClasses.md').
+ref contents.
+MicTextPresenter new
+		  text: (Microdown asRichText: (ref contents) );
+		  open
+```
+
 also known as pillar ? 
 
 ```
