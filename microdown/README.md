@@ -1,6 +1,123 @@
 
 # Microdown 
 
+## heres the working
+
+"get a list of all classes held under NewTools 
+my forked version called pharo-spec-NewTools
+"
+
+BaselineOfNewTools comment .
+
+Smalltalk allClasses collect: #name 
+(RPackageOrganizer default packageNamed: 'NewTools') definedClasses   
+((Smalltalk image packages flatCollect: #classes) at: 1) className.
+Smalltalk image packageAt: #NewTools ifAbsent: [ nil ]. 
+
+Smalltalk image packages.
+"lets select the packages beginning NewTools "
+packages := (Smalltalk image packages) select: [:p | p name  beginsWith: 'NewTools-CodeCritiques'].
+packages := (Smalltalk image packages) select: [:p | p name  beginsWith: 'NewTools'].
+classes := packages flatCollect: [ :p | p classes ].
+
+regex := '\[\[\[(.*)\]\]\]' asRegex.
+classAndComment := classes collect:[ :c |
+         | newComment | 
+         newComment := regex copy: (c comment)
+    translatingMatchesUsing: [ :match |
+        '```' , (regex subexpression: 2) , '```' ].
+		 { c . newComment } .
+		 
+		 
+
+
+
+
+"eventually we got regex matching correctly "
+regex := '\[\[\[(.*)\]\]\]' asRegex.
+result := regex copy: '[[[ hello world aaa ]]]' 
+    translatingMatchesUsing: [ :match |
+        '```' , (regex subexpression: 2) , '```'
+    ].
+
+
+# regular expressions 
+
+```
+'hello' copyWithRegex: '[elo]+' matchesReplacedWith: 'i' 
+'test [[[(hello)]]] end' copyWithRegex: '\[\[\[(.*)\]\]\]' matchesReplacedWith: '```{_1}```'.   
+```
+
+we can make a regex from a string but it doesnt get us anywhere 
+
+```
+"this does not work"
+re := '\[\[\[(.*)\]\]\]' asRegex.
+result := re replacingMatchesWith: '```{1}```'.
+```
+
+## NewTools
+
+```
+"get a list of all classes held under NewTools 
+my forked version called pharo-spec-NewTools
+"
+
+BaselineOfNewTools comment .
+
+Smalltalk allClasses collect: #name 
+(RPackageOrganizer default packageNamed: 'NewTools') definedClasses   
+((Smalltalk image packages flatCollect: #classes) at: 1) className.
+Smalltalk image packageAt: #NewTools ifAbsent: [ nil ]. 
+
+Smalltalk image packages.
+"lets select the packages beginning NewTools "
+packages := (Smalltalk image packages) select: [:p | p name  beginsWith: 'NewTools-CodeCritiques'].
+packages := (Smalltalk image packages) select: [:p | p name  beginsWith: 'NewTools'].
+classes := packages flatCollect: [ :p | p classes ].
+classAndComment := classes collect:[ :c | {c . c comment} ].
+(classAndComment select:[ :c | (c at: 2) isEmpty not ]) select: [:c | (c at: 2) .
+```
+
+
+
+## NewTools
+
+Lets fix some documentation - lets select package NewTools and any sub packages 
+lets for each class listed - 
+
+```
+"lets select the packages beginning NewTools "
+(Smalltalk image packages) select: [:p | p name  beginsWith: 'NewTools'].
+```
+
+###
+
+```
+"get a list of all classes held under NewTools 
+my forked version called pharo-spec-NewTools
+"
+
+BaselineOfNewTools comment .
+
+Smalltalk allClasses collect: #name 
+(RPackageOrganizer default packageNamed: 'NewTools') definedClasses   
+((Smalltalk image packages flatCollect: #classes) at: 1) className.
+Smalltalk image packageAt: #NewTools ifAbsent: [ nil ]. 
+
+Smalltalk image packages.
+"lets select the packages beginning NewTools "
+(Smalltalk image packages) select: [:p | p name  beginsWith: 'NewTools'].
+
+```
+
+## 
+
+
+```
+root := Microdown new parseFile: ('/home/terry/code/NewPharoByExample9/Chapters/BasicClasses/BasicClasses.md' asFileReference).
+```
+
 ## Pharo 13
 
 playground
