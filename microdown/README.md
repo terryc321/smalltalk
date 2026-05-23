@@ -55,8 +55,6 @@ defaultDocumentRoots
 ```
 		  
 		  
-```
-
 can we view a microdown .md file from the Pharo By Example 9 github book ?
 
 use spotter shift + enter and put microdown - look for either examples or tests - see a load uri test 
